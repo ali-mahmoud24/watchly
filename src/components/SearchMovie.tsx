@@ -48,8 +48,8 @@ export default function SearchMovie() {
       setHighlightedIndex((i) => (i === 0 ? length - 1 : i - 1));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      const m = movies[highlightedIndex];
-      if (m) selectMovie(m);
+      const movie = movies[highlightedIndex];
+      if (movie) selectMovie(movie);
     }
   };
 

@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
-import type { Movie } from '../types/movie';
-import MovieCardDropdown from './MovieCardDropdown';
+import { useEffect, useRef } from "react";
+
+import MovieCardDropdown from "./MovieCardDropdown";
+
+import type { Movie } from "../types/movie";
 
 type Props = {
   movies: Movie[];
@@ -23,7 +25,7 @@ export default function MovieDropdown({
   useEffect(() => {
     if (!movies.length) return;
     const el = itemsRef.current[highlightedIndex];
-    el?.scrollIntoView({ block: 'nearest' });
+    el?.scrollIntoView({ block: "nearest" });
   }, [highlightedIndex, movies.length]);
 
   return (
@@ -36,11 +38,13 @@ export default function MovieDropdown({
         movies.map((movie, index) => (
           <div
             key={movie.id}
-            ref={(el) => (itemsRef.current[index] = el)}
+            ref={(el) => {
+              itemsRef.current[index] = el;
+            }}
             onMouseEnter={() => setHighlightedIndex(index)}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onSelect(movie.id)}
-            className={`${index === highlightedIndex ? 'bg-blue-100' : ''}`}
+            className={`${index === highlightedIndex ? "bg-blue-100" : ""}`}
           >
             <MovieCardDropdown movie={movie} />
           </div>
