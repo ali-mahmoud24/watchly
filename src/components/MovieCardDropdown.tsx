@@ -1,4 +1,5 @@
-import type { Movie } from '../types/movie';
+import type { Movie } from "../types/movie";
+import MovieMeta from "./MovieMeta";
 
 type Props = {
   movie: Movie;
@@ -6,9 +7,6 @@ type Props = {
 
 export default function MovieCardDropdown({ movie }: Props) {
   const hasImage = !!movie.primaryImage?.url;
-  const hasRating = !!movie.rating?.aggregateRating;
-  const hasYear = !!movie.startYear;
-  const hasType = !!movie.type;
 
   return (
     <div className="flex items-center gap-2 p-2 min-h-[56px]">
@@ -28,7 +26,7 @@ export default function MovieCardDropdown({ movie }: Props) {
       {/* Info */}
       <div className="flex-1 min-w-0">
         <h3 className="text-sm font-medium truncate">
-          {movie.primaryTitle ?? 'Untitled'}
+          {movie.primaryTitle ?? "Untitled"}
         </h3>
 
         {movie.originalTitle && movie.originalTitle !== movie.primaryTitle && (
@@ -37,13 +35,7 @@ export default function MovieCardDropdown({ movie }: Props) {
           </p>
         )}
 
-        <p className="text-xs text-gray-400 mt-0.5">
-          {hasYear ? movie.startYear : 'N/A'} •{' '}
-          {hasRating
-            ? `${movie.rating!.aggregateRating.toFixed(1)} ⭐`
-            : 'No rating'}
-          {hasType && ` • ${movie.type === 'movie' ? 'Movie' : 'TV Series'}`}
-        </p>
+        <MovieMeta movie={movie} />
       </div>
     </div>
   );
