@@ -7,9 +7,10 @@ import {
 } from '@/components/ui/dialog';
 
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+// import { toast } from 'sonner';
 
 import type { Movie } from '@/types/movie';
+import { useAddToWatchlist } from '@/hooks/useWatchList';
 
 type Props = {
   movie: Movie | null;
@@ -18,17 +19,19 @@ type Props = {
 };
 
 export default function MovieDetailsModal({ movie, open, onClose }: Props) {
+  const addMutation = useAddToWatchlist();
+
   if (!movie) return null;
 
-  const handleAddToWatchlist = () => {
-    console.log('Added to watchlist:', movie);
+  // const handleAddToWatchlist = () => {
+  //   console.log('Added to watchlist:', movie);
 
-    toast.success('Added to Watchlist', {
-      description: `${movie.primaryTitle} has been added successfully.`,
-    });
+  //   toast.success('Added to Watchlist', {
+  //     description: `${movie.primaryTitle} has been added successfully.`,
+  //   });
 
-    onClose();
-  };
+  //   onClose();
+  // };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -79,10 +82,11 @@ export default function MovieDetailsModal({ movie, open, onClose }: Props) {
 
             {/* ✅ Button stays at bottom/right */}
             <Button
-              onClick={handleAddToWatchlist}
-              className="mt-6 self-start md:self-end cursor-pointer"
+              onClick={() => addMutation.mutate(movie)}
+              disabled={addMutation.isPending}
+              className="mt-6 self-start md:self-end"
             >
-              ➕ Add to Watchlist
+              {addMutation.isPending ? 'Adding...' : '➕ Add to Watchlist'}
             </Button>
           </div>
         </div>
