@@ -6,6 +6,9 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+
 import type { Movie } from '@/types/movie';
 
 type Props = {
@@ -16,6 +19,16 @@ type Props = {
 
 export default function MovieDetailsModal({ movie, open, onClose }: Props) {
   if (!movie) return null;
+
+  const handleAddToWatchlist = () => {
+    console.log('Added to watchlist:', movie);
+
+    toast.success('Added to Watchlist', {
+      description: `${movie.primaryTitle} has been added successfully.`,
+    });
+
+    onClose();
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -30,9 +43,7 @@ export default function MovieDetailsModal({ movie, open, onClose }: Props) {
               : null}
           </DialogDescription>
         </DialogHeader>
-
         <div className="mt-4 flex flex-col md:flex-row gap-6">
-          {/* Movie Poster */}
           {movie.primaryImage?.url ? (
             <img
               src={movie.primaryImage.url}
@@ -47,23 +58,32 @@ export default function MovieDetailsModal({ movie, open, onClose }: Props) {
             </div>
           )}
 
-          {/* Movie Info */}
-          <div className="flex-1 space-y-3">
-            <p>
-              <strong>Type:</strong>{' '}
-              {movie.type === 'movie' ? '🎬 Movie' : '📺 TV Series'}
-            </p>
-            <p>
-              <strong>Start Year:</strong> {movie.startYear}
-            </p>
-            {movie.rating ? (
+          <div className="flex-1 flex flex-col justify-between">
+            <div className="space-y-3">
               <p>
-                <strong>Rating:</strong> ⭐ {movie.rating.aggregateRating} (
-                {movie.rating.voteCount.toLocaleString()} votes)
+                <strong>Type:</strong>{' '}
+                {movie.type === 'movie' ? '🎬 Movie' : '📺 TV Series'}
               </p>
-            ) : (
-              <p className="text-gray-500">No rating available</p>
-            )}
+              <p>
+                <strong>Start Year:</strong> {movie.startYear}
+              </p>
+              {movie.rating ? (
+                <p>
+                  <strong>Rating:</strong> ⭐ {movie.rating.aggregateRating} (
+                  {movie.rating.voteCount.toLocaleString()} votes)
+                </p>
+              ) : (
+                <p className="text-gray-500">No rating available</p>
+              )}
+            </div>
+
+            {/* ✅ Button stays at bottom/right */}
+            <Button
+              onClick={handleAddToWatchlist}
+              className="mt-6 self-start md:self-end cursor-pointer"
+            >
+              ➕ Add to Watchlist
+            </Button>
           </div>
         </div>
       </DialogContent>
