@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 import MovieDropdown from './MovieDropdown';
+import MovieDetailsModal from './MovieDetailsModal';
+
 import useDebounce from '../hooks/useDebounce';
 import useMovieSearch from '../hooks/useMovieSearch';
 
@@ -11,6 +13,9 @@ export default function SearchMovie() {
   const [inputValue, setInputValue] = useState(''); // always shown in the box
   const [searchTerm, setSearchTerm] = useState(''); // only drives search
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); // ✅ state for modal
+  const [modalOpen, setModalOpen] = useState(false); // ✅ state for modal
 
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -32,8 +37,10 @@ export default function SearchMovie() {
 
     setInputValue(movie.primaryTitle); // ✅ show title in input
     setSearchTerm(''); // ✅ clear search → no more fetch
-
     setShowDropdown(false);
+
+    setSelectedMovie(movie); // ✅ save selected movie
+    setModalOpen(true); // ✅ open modal
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -88,6 +95,13 @@ export default function SearchMovie() {
           }}
         />
       )}
+
+      {/* ✅ Modal */}
+      <MovieDetailsModal
+        movie={selectedMovie}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </div>
   );
 }
