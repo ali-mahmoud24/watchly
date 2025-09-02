@@ -1,6 +1,8 @@
-import Header from './components/Header';
-import SearchBar from './components/SearchMovie';
-import { Toaster } from '@/components/ui/sonner';
+import Header from "@/components/Header";
+import SearchBar from "@/components/SearchMovie";
+import Watchlist from "@/components/watchlist";
+
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   return (
@@ -10,9 +12,12 @@ function App() {
         <Toaster
           richColors
           position="top-right"
-          theme="light" // or "dark" to force
+          theme="light"
         />
+        {/* SearchBar */}
         <SearchBar />
+        {/* Watchlist */}
+        <Watchlist />
       </main>
     </div>
   );

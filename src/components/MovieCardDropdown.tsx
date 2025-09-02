@@ -1,5 +1,6 @@
-import type { Movie } from "../types/movie";
 import MovieMeta from "./MovieMeta";
+
+import type { Movie } from "@/types/movie";
 
 type Props = {
   movie: Movie;

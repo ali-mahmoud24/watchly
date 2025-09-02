@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 import MovieCardDropdown from "./MovieCardDropdown";
 
-import type { Movie } from "../types/movie";
+import type { Movie } from "@/types/movie";
 
 type Props = {
   movies: Movie[];

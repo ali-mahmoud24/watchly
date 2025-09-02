@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
-import MovieDropdown from './MovieDropdown';
-import MovieDetailsModal from './MovieDetailsModal';
+import MovieDropdown from "./MovieDropdown";
+import MovieDetailsModal from "./MovieDetailsModal";
 
-import useDebounce from '../hooks/useDebounce';
-import useMovieSearch from '../hooks/useMovieSearch';
+import { useClickOutside } from "@/hooks/useClickOutside";
+import useDebounce from "@/hooks/useDebounce";
+import useMovieSearch from "@/hooks/useMovieSearch";
 
-import type { Movie } from '../types/movie';
-import { useClickOutside } from '../hooks/useClickOutside';
+import type { Movie } from "@/types/movie";
 
 export default function SearchMovie() {
-  const [inputValue, setInputValue] = useState(''); // always shown in the box
-  const [searchTerm, setSearchTerm] = useState(''); // only drives search
+  const [inputValue, setInputValue] = useState(""); // always shown in the box
+  const [searchTerm, setSearchTerm] = useState(""); // only drives search
   const [highlightedIndex, setHighlightedIndex] = useState(0);
 
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); // ✅ state for modal
@@ -33,10 +33,10 @@ export default function SearchMovie() {
   }, [debounced, movies.length]);
 
   const selectMovie = (movie: Movie) => {
-    console.log('Selected movie:', movie.id, movie.primaryTitle);
+    console.log("Selected movie:", movie.id, movie.primaryTitle);
 
     setInputValue(movie.primaryTitle); // ✅ show title in input
-    setSearchTerm(''); // ✅ clear search → no more fetch
+    setSearchTerm(""); // ✅ clear search → no more fetch
     setShowDropdown(false);
 
     setSelectedMovie(movie); // ✅ save selected movie
@@ -47,13 +47,13 @@ export default function SearchMovie() {
     const length = isLoading ? 0 : movies.length;
     if (length === 0) return;
 
-    if (e.key === 'ArrowDown') {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
       setHighlightedIndex((i) => (i + 1) % length);
-    } else if (e.key === 'ArrowUp') {
+    } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setHighlightedIndex((i) => (i === 0 ? length - 1 : i - 1));
-    } else if (e.key === 'Enter') {
+    } else if (e.key === "Enter") {
       e.preventDefault();
       const movie = movies[highlightedIndex];
       if (movie) selectMovie(movie);
@@ -83,6 +83,7 @@ export default function SearchMovie() {
         </div>
       )}
 
+      {/* MovieDropdown */}
       {showDropdown && (movies.length > 0 || isLoading || isError) && (
         <MovieDropdown
           movies={movies}
@@ -96,7 +97,7 @@ export default function SearchMovie() {
         />
       )}
 
-      {/* ✅ Modal */}
+      {/* Modal */}
       <MovieDetailsModal
         movie={selectedMovie}
         open={modalOpen}
