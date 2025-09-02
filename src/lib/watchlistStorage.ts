@@ -27,3 +27,20 @@ export async function addMovieToStorage(movie: Movie): Promise<Movie[]> {
   setWatchlist(updated);
   return updated;
 }
+
+
+export async function removeMovieFromStorage(id: string): Promise<Movie[]> {
+  const current = getWatchlist();
+  const updated = current.filter((m) => m.id !== id);
+  setWatchlist(updated);
+  return updated;
+}
+
+export async function toggleWatchedInStorage(id: string): Promise<Movie[]> {
+  const current = getWatchlist();
+  const updated = current.map((m) =>
+    m.id === id ? { ...m, watched: !m.watched } : m
+  );
+  setWatchlist(updated);
+  return updated;
+}

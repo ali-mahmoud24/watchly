@@ -13,4 +13,5 @@ export interface Movie {
     aggregateRating: number;
     voteCount: number;
   };
+  watched?: boolean
 }
