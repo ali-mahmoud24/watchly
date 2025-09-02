@@ -22,7 +22,7 @@ export default function SearchMovie() {
   const containerRef = useRef<HTMLDivElement>(null);
   useClickOutside(containerRef, () => setShowDropdown(false));
 
-  const debounced = useDebounce(searchTerm, 500);
+  const debounced = useDebounce(searchTerm, 250);
 
   const { data: movies = [], isLoading, isError } = useMovieSearch(debounced);
   const inputRef = useRef<HTMLInputElement>(null);
