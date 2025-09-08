@@ -102,6 +102,7 @@ export default function SearchMovie() {
         movie={selectedMovie}
         open={modalOpen}
         onClose={() => setModalOpen(false)}
+        setInputValue = {setInputValue}
       />
     </div>
   );

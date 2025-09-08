@@ -1,6 +1,6 @@
 export interface Movie {
   id: string;
-  type: "movie" | "tvSeries";
+  type: 'movie' | 'tvSeries';
   primaryTitle: string;
   originalTitle: string;
   primaryImage?: {
@@ -13,5 +13,6 @@ export interface Movie {
     aggregateRating: number;
     voteCount: number;
   };
-  watched?: boolean
+  watched?: boolean;
+  addedAt?: number;
 }

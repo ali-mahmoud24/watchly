@@ -23,11 +23,10 @@ export async function addMovieToStorage(movie: Movie): Promise<Movie[]> {
     // Treat as an error to exercise onError path
     throw new Error('Already in watchlist');
   }
-  const updated = [...current, movie];
+  const updated = [{ ...movie, addedAt: Date.now() }, ...current];
   setWatchlist(updated);
   return updated;
 }
-
 
 export async function removeMovieFromStorage(id: string): Promise<Movie[]> {
   const current = getWatchlist();

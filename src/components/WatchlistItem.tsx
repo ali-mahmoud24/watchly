@@ -1,7 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { useRemoveFromWatchlist, useToggleWatched } from "@/hooks/useWatchlist";
+import { Button } from '@/components/ui/button';
+import { Switch } from './ui/switch';
+import { Trash2, Star, Film, Tv, Calendar } from 'lucide-react';
 
-import type { Movie } from "@/types/movie";
+import { useRemoveFromWatchlist, useToggleWatched } from '@/hooks/useWatchlist';
+
+import type { Movie } from '@/types/movie';
+import { formatDistanceToNow } from 'date-fns';
 
 type Props = { movie: Movie };
 
@@ -10,56 +14,78 @@ export default function WatchlistItem({ movie }: Props) {
   const toggleMutation = useToggleWatched();
 
   return (
-    <div className="bg-white rounded-xl shadow p-3 flex flex-col h-full">
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow p-4 flex flex-col h-full">
       {/* Image */}
       {movie.primaryImage?.url ? (
         <img
           src={movie.primaryImage.url}
           alt={movie.primaryTitle}
-          className="rounded-lg w-full aspect-[2/3] object-cover mb-3"
+          className="rounded-lg w-full aspect-[2/3] object-cover mb-4"
         />
       ) : (
-        <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg mb-3">
-          <span className="text-gray-500 text-sm">No Image</span>
+        <div className="w-full h-64 bg-gray-100 flex items-center justify-center rounded-lg mb-4">
+          <span className="text-gray-400 text-sm">No Image Available</span>
         </div>
       )}
 
       {/* Content */}
       <div className="flex-1 flex flex-col">
-        <h3 className="font-semibold text-lg line-clamp-2 mb-1">
+        <h3 className="font-semibold text-lg text-gray-900 line-clamp-2 mb-1">
           {movie.primaryTitle}
         </h3>
-        <p className="text-sm text-gray-500 line-clamp-1 mb-1">
-          {movie.originalTitle !== movie.primaryTitle
-            ? movie.originalTitle
-            : ""}
+        {movie.originalTitle !== movie.primaryTitle && (
+          <p className="text-sm text-gray-500 line-clamp-1 mb-1">
+            {movie.originalTitle}
+          </p>
+        )}
+        <p className="text-sm text-gray-600 flex items-center gap-1 mb-2">
+          {movie.type === 'movie' ? (
+            <Film className="w-4 h-4 text-gray-500" />
+          ) : (
+            <Tv className="w-4 h-4 text-gray-500" />
+          )}
+          {movie.type === 'movie' ? 'Movie' : 'TV Series'} · {movie.startYear}
         </p>
-        <p className="text-sm text-gray-600 mt-1 mb-1">
-          {movie.type === "movie" ? "🎬 Movie" : "📺 TV Series"} ·{" "}
-          {movie.startYear}
-        </p>
+
         {movie.rating && (
-          <p className="text-sm text-yellow-600 mt-1 mb-2">
-            ⭐ {movie.rating.aggregateRating} (
-            {movie.rating.voteCount.toLocaleString()} votes)
+          <p className="text-sm text-gray-700 flex items-center gap-1 mb-2">
+            <Star className="w-4 h-4 text-yellow-500" />
+            {movie.rating.aggregateRating} (
+            {movie.rating.voteCount.toLocaleString()} ratings)
           </p>
         )}
 
-        {/* Buttons at the bottom with proper spacing */}
-        <div className="mt-auto flex gap-2">
-          <Button
-            size="sm"
-            variant={movie.watched ? "secondary" : "default"}
-            onClick={() => toggleMutation.mutate(movie.id)}
-          >
-            {movie.watched ? "Watched ✅" : "Mark as Watched"}
-          </Button>
+        {/* Added At */}
+        {movie.addedAt && (
+          <p className="text-xs text-gray-500 flex items-center gap-1 mb-3">
+            <Calendar className="w-3 h-3" />
+            Added{' '}
+            {formatDistanceToNow(new Date(movie.addedAt), { addSuffix: true })}
+          </p>
+        )}
+
+        {/* Actions */}
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
+          {/* Switch with label */}
+          <label className="flex items-center gap-2 cursor-pointer">
+            <Switch
+              checked={movie.watched}
+              onCheckedChange={() => toggleMutation.mutate(movie.id)}
+            />
+            <span className="text-sm text-gray-700">
+              {movie.watched ? 'Watched' : 'Not Watched'}
+            </span>
+          </label>
+
+          {/* Delete button */}
           <Button
             size="sm"
             variant="destructive"
             onClick={() => removeMutation.mutate(movie.id)}
+            className="flex items-center gap-1 cursor-pointer"
           >
-            Delete ❌
+            <Trash2 className="w-4 h-4" />
+            Delete
           </Button>
         </div>
       </div>

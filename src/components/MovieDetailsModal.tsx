@@ -4,21 +4,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
-import { useAddToWatchlist } from "@/hooks/useWatchlist";
 
-import { toast } from "sonner";
-import type { Movie } from "@/types/movie";
+import { toast } from 'sonner';
+import type { Movie } from '@/types/movie';
+import { useAddToWatchlist } from '@/hooks/useWatchlist';
 
 type Props = {
   movie: Movie | null;
   open: boolean;
   onClose: () => void;
+  setInputValue: (value: string) => void;
 };
 
-export default function MovieDetailsModal({ movie, open, onClose }: Props) {
+export default function MovieDetailsModal({
+  movie,
+  open,
+  onClose,
+  setInputValue,
+}: Props) {
   const addMutation = useAddToWatchlist();
 
   if (!movie) return null;
@@ -54,8 +60,8 @@ export default function MovieDetailsModal({ movie, open, onClose }: Props) {
           <div className="flex-1 flex flex-col justify-between">
             <div className="space-y-3">
               <p>
-                <strong>Type:</strong>{" "}
-                {movie.type === "movie" ? "🎬 Movie" : "📺 TV Series"}
+                <strong>Type:</strong>{' '}
+                {movie.type === 'movie' ? '🎬 Movie' : '📺 TV Series'}
               </p>
               <p>
                 <strong>Start Year:</strong> {movie.startYear}
@@ -74,20 +80,21 @@ export default function MovieDetailsModal({ movie, open, onClose }: Props) {
               onClick={() =>
                 addMutation.mutate(movie, {
                   onSuccess: () => {
-                    toast.success("Added to Watchlist", {
+                    toast.success('Added to Watchlist', {
                       description: `${movie.primaryTitle} has been added successfully.`,
                     });
                     onClose();
+                    setInputValue('');
                   },
                   onError: () => {
-                    toast.error("Couldn’t add to watchlist");
+                    toast.error('Couldn’t add to watchlist');
                   },
                 })
               }
               disabled={addMutation.isPending}
               className="mt-6 self-start md:self-end"
             >
-              {addMutation.isPending ? "Adding..." : "➕ Add to Watchlist"}
+              {addMutation.isPending ? 'Adding...' : '➕ Add to Watchlist'}
             </Button>
           </div>
         </div>
