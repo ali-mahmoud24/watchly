@@ -1,3 +1,4 @@
+// src/components/Watchlist.tsx
 import { useState } from 'react';
 import WatchlistItem from './WatchlistItem';
 import SectionDivider from './SectionDivider';
@@ -30,8 +31,13 @@ import {
 } from 'lucide-react';
 
 import { useWatchlistQuery } from '@/hooks/useWatchlist';
+import MovieDetailsModal from './MovieDetailsModal';
+import type { Movie } from '@/types/movie';
 
 export default function Watchlist() {
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
   const [filter, setFilter] = useState<'all' | 'watched' | 'unwatched'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'title' | 'year' | 'recent'>('recent');
@@ -234,6 +240,11 @@ export default function Watchlist() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9, y: -10 }}
                 transition={{ duration: 0.25 }}
+                onClick={() => {
+                  setSelectedMovie(movie); // ✅ select
+                  setModalOpen(true); // ✅ open modal
+                }}
+                className="cursor-pointer"
               >
                 <WatchlistItem movie={movie} />
               </motion.div>
@@ -251,6 +262,14 @@ export default function Watchlist() {
           )}
         </motion.div>
       </AnimatePresence>
+
+      {/* The modal */}
+      <MovieDetailsModal
+        movie={selectedMovie}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        mode="watchlist" // ✅ full info mode
+      />
     </div>
   );
 }

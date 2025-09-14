@@ -1,21 +1,25 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import MovieDropdown from "./MovieDropdown";
-import MovieDetailsModal from "./MovieDetailsModal";
+import MovieDropdown from './MovieDropdown';
+import MovieDetailsModal from './MovieDetailsModal';
 
-import { useClickOutside } from "@/hooks/useClickOutside";
-import useDebounce from "@/hooks/useDebounce";
-import useMovieSearch from "@/hooks/useMovieSearch";
+import { useClickOutside } from '@/hooks/useClickOutside';
+import useDebounce from '@/hooks/useDebounce';
+import useMovieSearch from '@/hooks/useMovieSearch';
 
-import type { Movie } from "@/types/movie";
+import type { Movie } from '@/types/movie';
+import { useAddToWatchlist } from '@/hooks/useWatchlist';
+import { toast } from 'sonner';
 
 export default function SearchMovie() {
-  const [inputValue, setInputValue] = useState(""); // always shown in the box
-  const [searchTerm, setSearchTerm] = useState(""); // only drives search
+  const [inputValue, setInputValue] = useState(''); // always shown in the box
+  const [searchTerm, setSearchTerm] = useState(''); // only drives search
   const [highlightedIndex, setHighlightedIndex] = useState(0);
 
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); // ✅ state for modal
   const [modalOpen, setModalOpen] = useState(false); // ✅ state for modal
+
+  const addMutation = useAddToWatchlist();
 
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -33,10 +37,10 @@ export default function SearchMovie() {
   }, [debounced, movies.length]);
 
   const selectMovie = (movie: Movie) => {
-    console.log("Selected movie:", movie.id, movie.primaryTitle);
+    console.log('Selected movie:', movie.id, movie.primaryTitle);
 
     setInputValue(movie.primaryTitle); // ✅ show title in input
-    setSearchTerm(""); // ✅ clear search → no more fetch
+    setSearchTerm(''); // ✅ clear search → no more fetch
     setShowDropdown(false);
 
     setSelectedMovie(movie); // ✅ save selected movie
@@ -47,13 +51,13 @@ export default function SearchMovie() {
     const length = isLoading ? 0 : movies.length;
     if (length === 0) return;
 
-    if (e.key === "ArrowDown") {
+    if (e.key === 'ArrowDown') {
       e.preventDefault();
       setHighlightedIndex((i) => (i + 1) % length);
-    } else if (e.key === "ArrowUp") {
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setHighlightedIndex((i) => (i === 0 ? length - 1 : i - 1));
-    } else if (e.key === "Enter") {
+    } else if (e.key === 'Enter') {
       e.preventDefault();
       const movie = movies[highlightedIndex];
       if (movie) selectMovie(movie);
@@ -76,13 +80,11 @@ export default function SearchMovie() {
         onFocus={() => setShowDropdown(true)}
         onKeyDown={handleKeyDown}
       />
-
       {isError && (
         <div className="mt-2 text-red-500 text-sm text-center">
           ❌ Error, Please try again later
         </div>
       )}
-
       {/* MovieDropdown */}
       {showDropdown && (movies.length > 0 || isLoading || isError) && (
         <MovieDropdown
@@ -96,13 +98,25 @@ export default function SearchMovie() {
           }}
         />
       )}
-
       {/* Modal */}
       <MovieDetailsModal
         movie={selectedMovie}
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        setInputValue = {setInputValue}
+        mode="search"
+        onAddToWatchlist={(movie) =>
+          addMutation.mutate(movie, {
+            onSuccess: () => {
+              toast.success('Added to Watchlist', {
+                description: `${movie.primaryTitle} has been added successfully.`,
+              });
+              setModalOpen(false);
+            },
+            onError: () => {
+              toast.error('Couldn’t add to watchlist');
+            },
+          })
+        }
       />
     </div>
   );

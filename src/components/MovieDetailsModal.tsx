@@ -3,101 +3,131 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
+import { useMovieDetails } from '@/hooks/useMovieDetails';
 
-import { toast } from 'sonner';
 import type { Movie } from '@/types/movie';
-import { useAddToWatchlist } from '@/hooks/useWatchlist';
 
 type Props = {
   movie: Movie | null;
   open: boolean;
   onClose: () => void;
-  setInputValue: (value: string) => void;
+  mode: 'search' | 'watchlist';
+  onAddToWatchlist?: (movie: Movie) => void;
 };
 
 export default function MovieDetailsModal({
   movie,
   open,
   onClose,
-  setInputValue,
+  mode,
+  onAddToWatchlist,
 }: Props) {
-  const addMutation = useAddToWatchlist();
-
-  if (!movie) return null;
+  const { data, isLoading, isError } = useMovieDetails(movie?.id ?? '');
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl rounded-2xl p-6">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">
-            {movie.primaryTitle}
-          </DialogTitle>
-          <DialogDescription>
-            {movie.originalTitle !== movie.primaryTitle
-              ? `Original Title: ${movie.originalTitle}`
-              : null}
-          </DialogDescription>
+      <DialogContent
+        className={`max-w-5xl rounded-xl p-6 ${
+          mode === 'watchlist'
+            ? 'h-[85vh] sm:h-[90vh] overflow-y-auto'
+            : ''
+        }`}
+      >
+        <DialogHeader className="sticky top-0 bg-white z-10 pb-2">
+          <DialogTitle>{movie?.primaryTitle}</DialogTitle>
         </DialogHeader>
-        <div className="mt-4 flex flex-col md:flex-row gap-6">
-          {movie.primaryImage?.url ? (
-            <img
-              src={movie.primaryImage.url}
-              alt={movie.primaryTitle}
-              width={200}
-              height={300}
-              className="rounded-lg shadow-md object-cover"
-            />
-          ) : (
-            <div className="w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-lg">
-              <span className="text-gray-500">No Image</span>
-            </div>
-          )}
 
-          <div className="flex-1 flex flex-col justify-between">
-            <div className="space-y-3">
-              <p>
-                <strong>Type:</strong>{' '}
-                {movie.type === 'movie' ? '🎬 Movie' : '📺 TV Series'}
-              </p>
-              <p>
-                <strong>Start Year:</strong> {movie.startYear}
-              </p>
-              {movie.rating ? (
-                <p>
-                  <strong>Rating:</strong> ⭐ {movie.rating.aggregateRating} (
-                  {movie.rating.voteCount.toLocaleString()} votes)
+        {isLoading && (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
+          </div>
+        )}
+
+        {isError && (
+          <p className="text-red-500 text-center py-6">
+            Failed to load details. Please try again.
+          </p>
+        )}
+
+        {data && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4 items-start">
+            {/* Poster */}
+            {data.primaryImage?.url ? (
+              <img
+                src={data.primaryImage.url}
+                alt={data.primaryTitle}
+                className="rounded-lg w-full aspect-[2/3] object-cover shadow-md"
+              />
+            ) : (
+              <div className="w-full aspect-[2/3] bg-gray-100 flex items-center justify-center rounded-lg">
+                <span className="text-gray-400 text-sm">No Image Available</span>
+              </div>
+            )}
+
+            {/* Content */}
+            <div className="flex flex-col space-y-6">
+              {/* Basic Info */}
+              <div className="space-y-1">
+                <p className="text-sm text-gray-600">
+                  {data.type === 'movie' ? '🎬 Movie' : '📺 TV Series'} ·{' '}
+                  {data.startYear}
                 </p>
-              ) : (
-                <p className="text-gray-500">No rating available</p>
+                {data.rating && (
+                  <p className="text-sm text-gray-700">
+                    ⭐ {data.rating.aggregateRating} (
+                    {data.rating.voteCount.toLocaleString()} votes)
+                  </p>
+                )}
+              </div>
+
+              <hr />
+
+              {/* Plot */}
+              {data.plot && (
+                <p className="text-gray-800 text-sm leading-relaxed">
+                  {data.plot}
+                </p>
+              )}
+
+              <hr />
+
+              {/* Cast */}
+              <div className="space-y-2 text-sm">
+                {data.directors?.length > 0 && (
+                  <p>
+                    <span className="font-medium">Director(s):</span>{' '}
+                    {data.directors.map((d) => d.displayName).join(', ')}
+                  </p>
+                )}
+                {data.stars?.length > 0 && (
+                  <p>
+                    <span className="font-medium">Stars:</span>{' '}
+                    {data.stars.map((s) => s.displayName).join(', ')}
+                  </p>
+                )}
+              </div>
+
+              {/* Add Button (only in search mode) */}
+              {mode === 'search' && onAddToWatchlist && (
+                <>
+                  <hr />
+                  <Button
+                    className="w-fit"
+                    onClick={() => {
+                      if (movie) onAddToWatchlist(movie);
+                    }}
+                  >
+                    ➕ Add to Watchlist
+                  </Button>
+                </>
               )}
             </div>
-
-            <Button
-              onClick={() =>
-                addMutation.mutate(movie, {
-                  onSuccess: () => {
-                    toast.success('Added to Watchlist', {
-                      description: `${movie.primaryTitle} has been added successfully.`,
-                    });
-                    onClose();
-                    setInputValue('');
-                  },
-                  onError: () => {
-                    toast.error('Couldn’t add to watchlist');
-                  },
-                })
-              }
-              disabled={addMutation.isPending}
-              className="mt-6 self-start md:self-end"
-            >
-              {addMutation.isPending ? 'Adding...' : '➕ Add to Watchlist'}
-            </Button>
           </div>
-        </div>
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -1,14 +1,18 @@
 import { Button } from '@/components/ui/button';
-import { Switch } from './ui/switch';
+import { Switch } from '@/components/ui/switch';
+
 import { Trash2, Star, Film, Tv, Calendar } from 'lucide-react';
 
 import { useRemoveFromWatchlist, useToggleWatched } from '@/hooks/useWatchlist';
 
-import type { Movie } from '@/types/movie';
 import { formatDistanceToNow } from 'date-fns';
 
-type Props = { movie: Movie };
+import type { Movie } from '@/types/movie';
 
+type Props = {
+  movie: Movie;
+  onViewDetails?: (id: string) => void; // ✅ new prop
+};
 export default function WatchlistItem({ movie }: Props) {
   const removeMutation = useRemoveFromWatchlist();
   const toggleMutation = useToggleWatched();
@@ -65,7 +69,10 @@ export default function WatchlistItem({ movie }: Props) {
         )}
 
         {/* Actions */}
-        <div className="mt-auto flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
+        <div
+          className="mt-auto flex items-center justify-between gap-2 pt-3 border-t border-gray-100"
+          onClick={(e) => e.stopPropagation()} // ✅ prevent modal on action click
+        >
           {/* Switch with label */}
           <label className="flex items-center gap-2 cursor-pointer">
             <Switch
