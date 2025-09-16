@@ -1,14 +1,12 @@
 import { useState, useMemo } from 'react';
 
 import type { Movie } from '@/types/movie';
-
-export type WatchlistFilter = 'all' | 'watched' | 'unwatched';
-
+import type { WatchlistSortKey, WatchlistFilterKey } from '@/types/watchlist';
 
 export function useWatchlistState(watchlist: Movie[] = []) {
-  const [filter, setFilter] = useState<WatchlistFilter>('all');
+  const [filter, setFilter] = useState<WatchlistFilterKey>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'title' | 'year' | 'recent'>('recent');
+  const [sortBy, setSortBy] = useState<WatchlistSortKey>('recent');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // counts

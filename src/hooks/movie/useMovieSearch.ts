@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import apiIMDB from '../lib/apiIMDB';
-import type { Movie } from '../types/movie';
+
+import apiIMDB from '@/lib/apiIMDB';
+import type { Movie } from '@/types/movie';
 
 export const MOVIES_QK = ['movies'] as const;
 

@@ -3,7 +3,7 @@ import { Switch } from '@/components/ui/switch';
 
 import { Trash2, Star, Film, Tv, Calendar } from 'lucide-react';
 
-import { useRemoveFromWatchlist, useToggleWatched } from '@/hooks/useWatchlist';
+import { useRemoveFromWatchlist, useToggleWatched } from '@/hooks/watchlist/useWatchlist';
 
 import { formatDistanceToNow } from 'date-fns';
 

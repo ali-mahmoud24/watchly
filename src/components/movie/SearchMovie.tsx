@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import MovieDropdown from './MovieDropdown';
 import MovieDetailsModal from './MovieDetailsModal';
 
-import { useClickOutside } from '@/hooks/useClickOutside';
-import useDebounce from '@/hooks/useDebounce';
-import useMovieSearch from '@/hooks/useMovieSearch';
-import { useAddToWatchlist } from '@/hooks/useWatchlist';
+import { useClickOutside } from '@/hooks/common/useClickOutside';
+import useDebounce from '@/hooks/common/useDebounce';
+import useMovieSearch from '@/hooks/movie/useMovieSearch';
+import { useAddToWatchlist } from '@/hooks/watchlist/useWatchlist';
 
 import { toast } from 'sonner';
 

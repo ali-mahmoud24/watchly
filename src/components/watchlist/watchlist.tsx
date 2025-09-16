@@ -4,9 +4,9 @@ import WatchlistGrid from './WatchlistGrid';
 import MovieDetailsModal from '../movie/MovieDetailsModal';
 import SectionDivider from '../common/SectionDivider';
 
-import { useWatchlistQuery } from '@/hooks/useWatchlist';
-import { useWatchlistState } from '@/hooks/useWatchlistState';
-import { useMovieModal } from '@/hooks/useMovieModal';
+import { useWatchlistQuery } from '@/hooks/watchlist/useWatchlist';
+import { useWatchlistState } from '@/hooks/watchlist/useWatchlistFilters';
+import { useMovieModal } from '@/hooks/movie/useMovieModal';
 
 export default function Watchlist() {
   const { selectedMovie, open, openModal, closeModal } = useMovieModal();

@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Loader2, X } from 'lucide-react';
 
-import { useMovieDetails } from '@/hooks/useMovieDetails';
+import { useMovieDetails } from '@/hooks/movie/useMovieDetails';
 import type { Movie } from '@/types/movie';
 
 type Props = {
