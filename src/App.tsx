@@ -1,6 +1,6 @@
-import Header from "@/components/Header";
-import SearchBar from "@/components/SearchMovie";
-import Watchlist from "@/components/watchlist";
+import Header from "@/components/layout/Header";
+import SearchBar from "@/components/movie/SearchMovie";
+import Watchlist from "@/components/watchlist/watchlist";
 
 import { Toaster } from "@/components/ui/sonner";
 
