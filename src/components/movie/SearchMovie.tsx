@@ -11,26 +11,27 @@ import { useAddToWatchlist } from '@/hooks/watchlist/useWatchlist';
 import { toast } from 'sonner';
 
 import type { Movie } from '@/types/movie';
+import { useMovieModal } from '@/hooks/movie/useMovieModal';
 
 export default function SearchMovie() {
   const [inputValue, setInputValue] = useState(''); // always shown in the box
   const [searchTerm, setSearchTerm] = useState(''); // only drives search
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  const { selectedMovie, open, openModal, closeModal } = useMovieModal();
 
   const addMutation = useAddToWatchlist();
 
-  const [showDropdown, setShowDropdown] = useState(false);
-
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   useClickOutside(containerRef, () => setShowDropdown(false));
 
   const debounced = useDebounce(searchTerm, 250);
 
   const { data: movies = [], isLoading, isError } = useMovieSearch(debounced);
-  const inputRef = useRef<HTMLInputElement>(null);
+  
   // keep focus + reset highlight when results change
   useEffect(() => {
     inputRef.current?.focus();
@@ -40,10 +41,9 @@ export default function SearchMovie() {
   const selectMovie = (movie: Movie) => {
     setInputValue(movie.primaryTitle); // ✅ show title in input
     setSearchTerm(''); // ✅ clear search → no more fetch
-    setShowDropdown(false);
 
-    setSelectedMovie(movie); // ✅ save selected movie
-    setModalOpen(true); // ✅ open modal
+    setShowDropdown(false);
+    openModal(movie);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -81,7 +81,7 @@ export default function SearchMovie() {
       />
       {isError && (
         <div className="mt-2 text-red-500 text-sm text-center">
-          ❌ Error, Please try again later
+          Error, Please try again later ❌
         </div>
       )}
       {/* MovieDropdown */}
@@ -91,17 +91,14 @@ export default function SearchMovie() {
           isLoading={isLoading}
           highlightedIndex={highlightedIndex}
           setHighlightedIndex={setHighlightedIndex}
-          onSelect={(id) => {
-            const movie = movies.find((x) => x.id === id);
-            if (movie) selectMovie(movie);
-          }}
+          onSelect={selectMovie}
         />
       )}
       {/* Modal */}
       <MovieDetailsModal
         movie={selectedMovie}
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        open={open}
+        onClose={closeModal}
         mode="search"
         onAddToWatchlist={(movie) =>
           addMutation.mutate(movie, {
@@ -109,7 +106,7 @@ export default function SearchMovie() {
               toast.success('Added to Watchlist', {
                 description: `${movie.primaryTitle} has been added successfully.`,
               });
-              setModalOpen(false);
+              closeModal();
             },
             onError: (error) => {
               toast.error(`Couldn't add to watchlsit`, {
