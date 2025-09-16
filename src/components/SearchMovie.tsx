@@ -6,18 +6,19 @@ import MovieDetailsModal from './MovieDetailsModal';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import useDebounce from '@/hooks/useDebounce';
 import useMovieSearch from '@/hooks/useMovieSearch';
+import { useAddToWatchlist } from '@/hooks/useWatchlist';
+
+import { toast } from 'sonner';
 
 import type { Movie } from '@/types/movie';
-import { useAddToWatchlist } from '@/hooks/useWatchlist';
-import { toast } from 'sonner';
 
 export default function SearchMovie() {
   const [inputValue, setInputValue] = useState(''); // always shown in the box
   const [searchTerm, setSearchTerm] = useState(''); // only drives search
   const [highlightedIndex, setHighlightedIndex] = useState(0);
 
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); // ✅ state for modal
-  const [modalOpen, setModalOpen] = useState(false); // ✅ state for modal
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const addMutation = useAddToWatchlist();
 
@@ -37,8 +38,6 @@ export default function SearchMovie() {
   }, [debounced, movies.length]);
 
   const selectMovie = (movie: Movie) => {
-    console.log('Selected movie:', movie.id, movie.primaryTitle);
-
     setInputValue(movie.primaryTitle); // ✅ show title in input
     setSearchTerm(''); // ✅ clear search → no more fetch
     setShowDropdown(false);
@@ -112,8 +111,10 @@ export default function SearchMovie() {
               });
               setModalOpen(false);
             },
-            onError: () => {
-              toast.error('Couldn’t add to watchlist');
+            onError: (error) => {
+              toast.error(`Couldn't add to watchlsit`, {
+                description: error.message,
+              });
             },
           })
         }

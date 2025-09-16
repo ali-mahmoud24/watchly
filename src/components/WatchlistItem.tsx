@@ -8,6 +8,7 @@ import { useRemoveFromWatchlist, useToggleWatched } from '@/hooks/useWatchlist';
 import { formatDistanceToNow } from 'date-fns';
 
 import type { Movie } from '@/types/movie';
+import { toast } from 'sonner';
 
 type Props = {
   movie: Movie;
@@ -88,7 +89,16 @@ export default function WatchlistItem({ movie }: Props) {
           <Button
             size="sm"
             variant="destructive"
-            onClick={() => removeMutation.mutate(movie.id)}
+            onClick={() =>
+              removeMutation.mutate(movie.id, {
+                onSuccess: () => {
+                  toast.success('Movie deleted successfully');
+                },
+                onError: () => {
+                  toast.error(`Couldn't delete movie`);
+                },
+              })
+            }
             className="flex items-center gap-1 cursor-pointer"
           >
             <Trash2 className="w-4 h-4" />

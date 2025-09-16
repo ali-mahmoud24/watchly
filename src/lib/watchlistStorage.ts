@@ -21,7 +21,7 @@ export async function addMovieToStorage(movie: Movie): Promise<Movie[]> {
   const exists = current.some((m) => m.id === movie.id);
   if (exists) {
     // Treat as an error to exercise onError path
-    throw new Error('Already in watchlist');
+    throw new Error('Movie is already in watchlist');
   }
   const updated = [{ ...movie, addedAt: Date.now() }, ...current];
   setWatchlist(updated);
