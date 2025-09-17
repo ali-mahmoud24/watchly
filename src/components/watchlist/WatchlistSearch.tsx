@@ -7,12 +7,14 @@ type Props = {
 
 export default function WatchlistSearch({ value, onChange }: Props) {
   return (
-    <Input
-      type="text"
-      placeholder="Search movies..."
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="max-w-xs flex-1"
-    />
+    <div className="w-full min-w-0">
+      <Input
+        type="text"
+        placeholder="Search movies..."
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full"
+      />
+    </div>
   );
 }

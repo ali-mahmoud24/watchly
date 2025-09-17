@@ -28,20 +28,26 @@ export default function WatchlistControls({
   setSortOrder,
 }: WatchlistControlsProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      {/* Tabs */}
-      <WatchlistTabs filter={filter} setFilter={setFilter} counts={counts} />
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+      {/* Tabs (4/12) */}
+      <div className="md:col-span-5 min-w-0">
+        <WatchlistTabs filter={filter} setFilter={setFilter} counts={counts} />
+      </div>
 
-      {/* Search input */}
-      <WatchlistSearch value={searchQuery} onChange={setSearchQuery} />
+      {/* Search (5/12) */}
+      <div className="md:col-span-3 min-w-0">
+        <WatchlistSearch value={searchQuery} onChange={setSearchQuery} />
+      </div>
 
-      {/* Sorting */}
-      <WatchlistSort
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        sortOrder={sortOrder}
-        setSortOrder={setSortOrder}
-      />
+      {/* Sorting (3/12) */}
+      <div className="md:col-span-3 min-w-0 flex items-center justify-end">
+        <WatchlistSort
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+        />
+      </div>
     </div>
   );
 }

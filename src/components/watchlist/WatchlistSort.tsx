@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import type { WatchlistSortKey } from '@/types/watchlist';
 
-
 type Props = {
   sortBy: WatchlistSortKey;
   setSortBy: (s: WatchlistSortKey) => void;
@@ -78,43 +77,50 @@ export default function WatchlistSort({
   };
 
   return (
-    <div className="flex items-center border rounded-lg overflow-hidden">
-      <Select
-        value={sortBy}
-        onValueChange={(val) => setSortBy(val as typeof sortBy)}
-      >
-        <SelectTrigger className="w-36 border-0 rounded-none cursor-pointer">
-          <SelectValue placeholder="Sort by" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="recent" className="cursor-pointer">
-            Recently Added
-          </SelectItem>
-          <SelectItem value="title" className="cursor-pointer">
-            Title (A–Z)
-          </SelectItem>
-          <SelectItem value="year" className="cursor-pointer">
-            Release Year
-          </SelectItem>
-        </SelectContent>
-      </Select>
+    <div className="w-full min-w-0">
+      <div className="flex items-center justify-end gap-2">
+        {/* Select fills remaining space inside column but will be limited by column width */}
+        <div className="flex-1 min-w-0">
+          <Select
+            value={sortBy}
+            onValueChange={(val) => setSortBy(val as typeof sortBy)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="recent" className="cursor-pointer">
+                Recently Added
+              </SelectItem>
+              <SelectItem value="title" className="cursor-pointer">
+                Title (A–Z)
+              </SelectItem>
+              <SelectItem value="year" className="cursor-pointer">
+                Release Year
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild className="cursor-pointer">
-            <Button
-              variant="outline"
-              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-              className={`flex items-center justify-center w-16 h-10 gap-1`}
-            >
-              {getIcon()}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{getLabel()}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+                }
+                className="flex items-center justify-center w-12 h-10"
+              >
+                {getIcon()}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{getLabel()}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </div>
   );
 }
