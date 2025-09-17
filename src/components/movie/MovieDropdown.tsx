@@ -3,13 +3,14 @@ import { useEffect, useRef } from 'react';
 import MovieCardDropdown from './MovieCardDropdown';
 
 import type { Movie } from '@/types/movie';
+import LoadingMessage from '../common/LoadingMessage';
 
 type Props = {
   movies: Movie[];
   isLoading: boolean;
   highlightedIndex: number;
   setHighlightedIndex: React.Dispatch<React.SetStateAction<number>>;
-  onSelect: (movie: Movie) => void;
+  onSelectMovie: (movie: Movie) => void;
 };
 
 export default function MovieDropdown({
@@ -17,7 +18,7 @@ export default function MovieDropdown({
   isLoading,
   highlightedIndex,
   setHighlightedIndex,
-  onSelect,
+  onSelectMovie,
 }: Props) {
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -29,10 +30,8 @@ export default function MovieDropdown({
   }, [highlightedIndex, movies.length]);
 
   return (
-    <div className="absolute left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-2 max-h-80 overflow-y-auto z-50">
-      {isLoading && (
-        <div className="p-3 text-gray-500 text-sm">⏳ Loading…</div>
-      )}
+    <div className="absolute left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-2 max-h-80 overflow-y-auto z-50 cursor-pointer">
+      {isLoading && <LoadingMessage message="Loading results..." />}
 
       {!isLoading &&
         movies.map((movie, index) => (
@@ -43,7 +42,7 @@ export default function MovieDropdown({
             }}
             onMouseEnter={() => setHighlightedIndex(index)}
             onMouseDown={(e) => e.preventDefault()}
-            onClick={() => onSelect(movie)}
+            onClick={() => onSelectMovie(movie)}
             className={`${index === highlightedIndex ? 'bg-blue-100' : ''}`}
           >
             <MovieCardDropdown movie={movie} />

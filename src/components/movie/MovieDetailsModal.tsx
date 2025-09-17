@@ -6,7 +6,7 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Loader2, X } from 'lucide-react';
+import { BookmarkPlus, Loader2, X } from 'lucide-react';
 
 import { useMovieDetails } from '@/hooks/movie/useMovieDetails';
 import type { Movie } from '@/types/movie';
@@ -139,12 +139,13 @@ export default function MovieDetailsModal({
                       <>
                         <hr />
                         <Button
-                          className="w-fit"
+                          className="w-fit cursor-pointer"
                           onClick={() => {
                             if (movie) onAddToWatchlist(movie);
                           }}
                         >
-                          ➕ Add to Watchlist
+                          <BookmarkPlus className="w-4 h-4" />
+                          Add to Watchlist
                         </Button>
                       </>
                     )}
