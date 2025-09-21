@@ -10,37 +10,41 @@ type Props = {
 };
 
 export default function WatchlistTabs({ filter, setFilter, counts }: Props) {
+  const baseTrigger =
+    "w-full flex items-center justify-center gap-1.5 rounded-sm " +
+    "px-3 py-1.5 text-sm font-medium cursor-pointer transition-colors " +
+    "data-[state=active]:bg-background data-[state=active]:shadow-sm " +
+    "data-[state=active]:text-foreground " +
+    "border border-transparent data-[state=active]:border-border"; // keeps height stable
+
+  const badgeClass =
+    "flex-shrink-0 text-xs px-1.5 py-0.5 leading-none rounded-sm";
+
   return (
     <Tabs
       value={filter}
       onValueChange={(val) => setFilter(val as WatchlistFilterKey)}
     >
-      <TabsList className="grid w-full grid-cols-3 gap-2">
-        <TabsTrigger value="all" className="w-full p-0 cursor-pointer">
-          <div className="flex items-center justify-center gap-2 w-full min-w-0 px-3 py-2">
-            <span className="truncate">All</span>
-            <Badge variant="secondary" className="flex-shrink-0">
-              {counts.all}
-            </Badge>
-          </div>
+      <TabsList className="grid w-full grid-cols-3 gap-1 bg-muted p-1 rounded-md">
+        <TabsTrigger value="all" className={baseTrigger}>
+          <span className="truncate">All</span>
+          <Badge variant="secondary" className={badgeClass}>
+            {counts.all}
+          </Badge>
         </TabsTrigger>
 
-        <TabsTrigger value="watched" className="w-full p-0 cursor-pointer">
-          <div className="flex items-center justify-center gap-2 w-full min-w-0 px-3 py-2">
-            <span className="truncate">Watched</span>
-            <Badge variant="secondary" className="flex-shrink-0">
-              {counts.watched}
-            </Badge>
-          </div>
+        <TabsTrigger value="watched" className={baseTrigger}>
+          <span className="truncate">Watched</span>
+          <Badge variant="secondary" className={badgeClass}>
+            {counts.watched}
+          </Badge>
         </TabsTrigger>
 
-        <TabsTrigger value="unwatched" className="w-full p-0 cursor-pointer">
-          <div className="flex items-center justify-center gap-2 w-full min-w-0 px-3 py-2">
-            <span className="truncate">Unwatched</span>
-            <Badge variant="secondary" className="flex-shrink-0">
-              {counts.unwatched}
-            </Badge>
-          </div>
+        <TabsTrigger value="unwatched" className={baseTrigger}>
+          <span className="truncate">Unwatched</span>
+          <Badge variant="secondary" className={badgeClass}>
+            {counts.unwatched}
+          </Badge>
         </TabsTrigger>
       </TabsList>
     </Tabs>

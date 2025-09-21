@@ -10,7 +10,7 @@ export default function WatchlistSearch({ value, onChange }: Props) {
     <div className="w-full min-w-0">
       <Input
         type="text"
-        placeholder="Search movies..."
+        placeholder="Search watchlist..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full"
