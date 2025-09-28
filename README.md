@@ -30,20 +30,30 @@ Watchly serves as a playground to apply and refine real-world frontend engineeri
 ## 🚀 Getting Started
 
 ### 1️⃣ Clone the repo
+```bash
 git clone https://github.com/ali-mahmoud24/watchly.git  
-cd watchly  
+cd watchly 
+```
 
 ### 2️⃣ Install dependencies
+```bash
 npm install  
+```
 
 ### 3️⃣ Run development server
+```bash
 npm run dev  
+```
 
 ### 4️⃣ Build for production
-npm run build  
+```bash
+npm run build
+```
 
 ### 5️⃣ Preview production build
-npm run preview  
+```bash
+npm run preview
+```
 
 ---
 
@@ -55,20 +65,21 @@ npm run preview
 
 ## 📂 Project Structure
 
-watchly/  
-├── public/               # Static assets  
-├── src/  
-│   ├── components/       # Reusable UI components  
-│   ├── hooks/            # Custom React hooks  
-│   ├── lib/              # Utilities and helpers  
+watchly/
+├── public/               # Static assets
+├── src/
+│   ├── components/       # Reusable UI components
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/              # Utilities and helpers
 │   ├── types/            # TypeScript types
 │   ├── index.css         # Tailwind base styles
-│   ├── App.tsx           # Root component  
-│   └── main.tsx          # Entry point  
-├── index.html  
-├── package.json  
-├── tsconfig.json  
-└── vite.config.ts  
+│   ├── App.tsx           # Root component
+│   └── main.tsx          # Entry point
+├── index.html
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
+
 
 ---
 
