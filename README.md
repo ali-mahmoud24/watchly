@@ -65,6 +65,7 @@ npm run preview
 
 ## 📂 Project Structure
 
+```bash
 watchly/
 ├── public/               # Static assets
 ├── src/
@@ -79,6 +80,7 @@ watchly/
 ├── package.json
 ├── tsconfig.json
 └── vite.config.ts
+```
 
 
 ---
