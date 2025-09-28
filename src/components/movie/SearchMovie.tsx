@@ -31,7 +31,7 @@ export default function SearchMovie() {
 
   const addMutation = useAddToWatchlist();
 
-  const debounced = useDebounce(searchTerm, 250);
+  const debounced = useDebounce(searchTerm, 200);
 
   const { data: movies = [], isLoading, isError } = useMovieSearch(debounced);
 
